@@ -1,11 +1,13 @@
-var lat, lng;
+var lat, lon;
 
 function geolocationSuccess(position) {
   lat = position.coords.latitude;
-  lng = position.coords.longitude;
+  lon = position.coords.longitude;
+  var station = require("./Station");
+  station(lat, lon);
   document.write(lat);
   document.write("\n");
-  document.write(lng);
+  document.write(lon);
 }
 
 function geolocationError(error) {
@@ -28,7 +30,7 @@ var geoOptions = {
 if(!navigator.geolocation) {
   console.log('あなたの端末では、現在位置を取得できません。');
 } else {
-  navigator.geolocation.getCurrentPosition(
+  navigator.geolocation.watchPosition(//やたら高頻度で位置情報を収集します 
     geolocationSuccess, geolocationError, geoOptions
   );
 }
