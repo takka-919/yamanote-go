@@ -2,12 +2,12 @@ module.exports = function(lat, lon) {
   for (let station of Stations) {
     station.find(lat, lon);
   }
-  //document.write(nowLocation);
+  return nowLocation;
 
 };
 
 var ikiti = 0.00377778;
-var nowLocation = 'street'; 
+var nowLocation = 'Street'; 
 
 class Station {
   constructor(name, lat, lon) {

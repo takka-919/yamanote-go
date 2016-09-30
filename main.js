@@ -1,13 +1,18 @@
 var lat, lon;
+var pastLocation = 'Street';
 
 function geolocationSuccess(position) {
   lat = position.coords.latitude;
   lon = position.coords.longitude;
   var station = require("./Station");
-  station(lat, lon);
-  //document.write(lat);
-  //document.write("\n");
-  //document.write(lon);
+  var nowLocation = station(lat, lon);
+  if (nowLocation == 'Street' && pastLocation != 'Street') {
+    pastLocation = 'Street'
+    play('Street');
+  } else if (pastLocation == 'Street' && nowLocation != 'Street') {
+    pastLocation = nowLocation
+    play(nowLocation);
+  }
 }
 
 function geolocationError(error) {
@@ -71,6 +76,19 @@ var playSound = function(buffer) {
   source.start(0);
 };
 
+function play(place) {
+  if (place == 'Street') {
+    getAudioBuffer('./bgm/Street.mp3', function(buffer) {
+      playSound(buffer);
+    });
+  } else {
+    var bgmURL = ["./bgm/", place, ".mp3"].join("");
+    getAudioBuffer(bgmURL, function(buffer) {
+      playSound(buffer);
+    });
+  }
+
+}
 // main
 window.onload = function() {  
   // サウンドを読み込む
