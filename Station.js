@@ -2,7 +2,7 @@ module.exports = function(lat, lon) {
   for (let station of Stations) {
     station.find(lat, lon);
   }
-  document.write(nowLocation);
+  //document.write(nowLocation);
 
 };
 
