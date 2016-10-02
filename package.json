@@ -15,10 +15,18 @@
   "bugs": {
     "url": "https://github.com/takka-919/yamanote-go/issues"
   },
+  "engine": {
+    "node": "v5.10.x",
+    "npm": "3.9.x"
+  },
   "homepage": "https://github.com/takka-919/yamanote-go#readme",
   "devDependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "webpack": "^1.13.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0"
   }
 }
