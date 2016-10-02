@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/takka-919/yamanote-go#readme",
   "devDependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
     "webpack": "^1.13.2"
   }
 }
