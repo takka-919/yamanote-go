@@ -46,6 +46,8 @@
 
 	var lat, lon;
 	var pastLocation = 'Street';
+	var audioElm = document.getElementById("audio1");
+	var place = 'Tokyo';
 
 	function geolocationSuccess(position) {
 	  lat = position.coords.latitude;
@@ -53,11 +55,13 @@
 	  var station = __webpack_require__(1);
 	  var nowLocation = station(lat, lon);
 	  if (nowLocation == 'Street' && pastLocation != 'Street') {
-	    pastLocation = 'Street'
-	    play('Street');
+	    pastLocation = 'Street';
+	    place = 'Street';
+	    //play('Street');
 	  } else if (pastLocation == 'Street' && nowLocation != 'Street') {
 	    pastLocation = nowLocation
-	    play(nowLocation);
+	    place = nowLocation;
+	    //play(nowLocation);
 	  }
 	}
 
@@ -85,68 +89,95 @@
 	    geolocationSuccess, geolocationError, geoOptions
 	  );
 	}
-	window.AudioContext = window.AudioContext || window.webkitAudioContext;  
-	var context = new AudioContext();
 
-	// Audio 用の buffer を読み込む
-	var getAudioBuffer = function(url, fn) {  
-	  var req = new XMLHttpRequest();
-	  // array buffer を指定
-	  req.responseType = 'arraybuffer';
+	function togglePlay() {
+	  if (document.getElementById("audio1")) {
 
-	  req.onreadystatechange = function() {
-	    if (req.readyState === 4) {
-	      if (req.status === 0 || req.status === 200) {
-	        // array buffer を audio buffer に変換
-	        context.decodeAudioData(req.response, function(buffer) {
-	          // コールバックを実行
-	          fn(buffer);
-	        });
-	      }
+	    if (audioElm.paused == true) {
+	      playAudio(audioElm);    //  if player is paused, then play the file
+	    } else {
+	      pauseAudio(audioElm);   //  if player is playing, then pause
 	    }
-	  };
-
-	  req.open('GET', url, true);
-	  req.send('');
-	};
-
-	// サウンドを再生
-	var playSound = function(buffer) {  
-	  // source を作成
-	  var source = context.createBufferSource();
-	  // buffer をセット
-	  source.buffer = buffer;
-	  // context に connect
-	  source.connect(context.destination);
-	  // 再生
-	  source.start(0);
-	};
-
-	function play(place) {
-	  if (place == 'Street') {
-	    getAudioBuffer('./bgm/Street.mp3', function(buffer) {
-	      playSound(buffer);
-	    });
-	  } else {
-	    var bgmURL = ["./bgm/", place, ".mp3"].join("");
-	    getAudioBuffer(bgmURL, function(buffer) {
-	      playSound(buffer);
-	    });
 	  }
-
 	}
-	// main
+
+	function playAudio(audioElm) {
+	  document.getElementById("btn").innerHTML = "Pause"; // Set button text == Pause
+	  // Get file from text box and assign it to the source of the audio element 
+	  var bgmURL = ["./bgm/", place, ".mp3"].join("");
+	  audioElm.src = bgmURL;
+	  audioElm.play();
+	}
+
+	function pauseAudio(audioElm) {
+	  document.getElementById("btn").innerHTML = "play"; // Set button text == Play
+	  audioElm.pause();
+	}
+
 	window.onload = function() {  
-	  // サウンドを読み込む
-	  getAudioBuffer('./bgm/Street.mp3', function(buffer) {
-	    // 読み込み完了後にボタンにクリックイベントを登録
-	    var btn = document.getElementById('btn');
-	    btn.onclick = function() {
+	  var btn = document.getElementById('btn');
+	  btn.onclick = function() {
 	      // サウンドを再生
-	      playSound(buffer);
-	    };
-	  });
+	    togglePlay();
+	  };
 	};
+
+
+
+	//////////以下はweb audio api
+
+	// window.AudioContext = window.AudioContext || window.webkitAudioContext;  
+	// var context = new AudioContext();
+
+	// // Audio 用の buffer を読み込む
+	// var getAudioBuffer = function(url, fn) {  
+	//   var req = new XMLHttpRequest();
+	//   // array buffer を指定
+	//   req.responseType = 'arraybuffer';
+
+	//   req.onreadystatechange = function() {
+	//     if (req.readyState === 4) {
+	//       if (req.status === 0 || req.status === 200) {
+	//         // array buffer を audio buffer に変換
+	//         context.decodeAudioData(req.response, function(buffer) {
+	//           // コールバックを実行
+	//           fn(buffer);
+	//         });
+	//       }
+	//     }
+	//   };
+
+	//   req.open('GET', url, true);
+	//   req.send('');
+	// };
+
+	// // サウンドを再生
+	// var playSound = function(buffer) {  
+	//   // source を作成
+	//   var source = context.createBufferSource();
+	//   // buffer をセット
+	//   source.buffer = buffer;
+	//   // context に connect
+	//   source.connect(context.destination);
+	//   // 再生
+	//   source.start(0);
+	// };
+
+	// function play(place) {
+	//   if (place == 'Street') {
+	//     getAudioBuffer('./bgm/Street.mp3', function(buffer) {
+	//       playSound(buffer);
+	//     });
+	//   } else {
+	//     var bgmURL = ["./bgm/", place, ".mp3"].join("");
+	//     getAudioBuffer(bgmURL, function(buffer) {
+	//       playSound(buffer);
+	//     });
+	//   }
+
+	// }
+	// // main
+
 
 /***/ },
 /* 1 */
